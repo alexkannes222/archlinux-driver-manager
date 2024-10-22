@@ -18,7 +18,7 @@ impl PackageManager {
         }
     }
 
-    pub fn get<S: AsRef<str>>(&self, package_name: S) -> Option<Package> {
+    pub fn get<S: AsRef<str>>(&self, package_name: S) -> Option<&Package> {
         let db = self.handle.localdb();
         db.pkg(package_name.as_ref()).ok()
     }
@@ -58,7 +58,7 @@ impl PackageManager {
             let package = self.get(package_name);
 
             if let Some(package) = package {
-                self.handle.trans_remove_pkg(package).unwrap();
+                self.handle.trans_remove_pkg(&package).unwrap();
                 actual_remove_list.push(package_name.to_owned());
             } else {
                 self.handle.trans_release().unwrap();
